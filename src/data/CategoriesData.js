@@ -1,26 +1,156 @@
-// mockData.js
+// data/CategoriesData.js
 
 export const products = [
-  { id: 1, name: 'Linen Blend Shirt', price: 59.00, oldPrice: 74.00, rating: 4.5, reviews: 128, tag: '-20%', image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=600&auto=format&fit=crop', colors: ['#E5E7EB', '#000000'] },
-  { id: 2, name: 'Relaxed Fit Shirt', price: 49.00, rating: 4.8, reviews: 84, image: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=600&auto=format&fit=crop', colors: ['#4B5563', '#000000'] },
-  { id: 3, name: 'Pique Polo Shirt', price: 39.00, rating: 4.2, reviews: 150, image: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=600&auto=format&fit=crop', colors: ['#000000', '#D1D5DB'] },
-  { id: 4, name: 'Premium Cotton Tee', price: 29.00, oldPrice: 39.00, rating: 4.9, reviews: 76, tag: '-25%', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop', colors: ['#D1D5DB', '#F3F4F6', '#000000'] },
-  { id: 5, name: 'Tailored Trousers', price: 69.00, rating: 4.7, reviews: 68, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=600&auto=format&fit=crop', colors: ['#A16207', '#000000'] },
-  { id: 6, name: 'Pleated Shorts', price: 45.00, rating: 4.6, reviews: 94, image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=600&auto=format&fit=crop', colors: ['#4B5563', '#111827'] },
-  { id: 7, name: 'Striped Knit Polo', price: 55.00, oldPrice: 69.00, rating: 4.4, reviews: 133, tag: '-20%', image: 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=600&auto=format&fit=crop', colors: ['#D1D5DB', '#000000'] },
-  { id: 8, name: 'Relaxed Fit Blazer', price: 129.00, rating: 4.8, reviews: 56, image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop', colors: ['#000000'] },
-  { id: 9, name: 'Oversized Shirt', price: 54.00, rating: 4.5, reviews: 87, image: 'https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=600&auto=format&fit=crop', colors: ['#F3F4F6', '#000000'] },
-  { id: 10, name: 'Regular Fit Jeans', price: 59.00, rating: 4.3, reviews: 72, image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=600&auto=format&fit=crop', colors: ['#1E3A8A', '#000000'] },
-  { id: 11, name: 'Linen Blend Shorts', price: 42.00, rating: 4.6, reviews: 52, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=600&auto=format&fit=crop', colors: ['#D1D5DB'] },
-  { id: 12, name: 'Lightweight Jacket', price: 89.00, oldPrice: 119.00, rating: 4.7, reviews: 47, tag: '-25%', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=600&auto=format&fit=crop', colors: ['#4B5563', '#000000'] },
+  {
+    id: "m1",
+    name: "Classic Oxford Shirt",
+    price: 59.00,
+    oldPrice: 79.00,
+    image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=800&auto=format&fit=crop",
+    tag: "SALE",
+    rating: 4.5,
+    reviews: 128,
+    colors: ["#ffffff", "#000000", "#93C5FD"]
+  },
+  {
+    id: "m2",
+    name: "Slim Fit Denim Jeans",
+    price: 89.00,
+    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=800&auto=format&fit=crop",
+    rating: 5.0,
+    reviews: 340,
+    colors: ["#1E3A8A", "#0F172A"]
+  },
+  {
+    id: "m3",
+    name: "Cotton Crewneck T-Shirt",
+    price: 25.00,
+    image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop",
+    rating: 4.0,
+    reviews: 89,
+    colors: ["#000000", "#FFFFFF", "#9CA3AF"]
+  },
+  {
+    id: "m4",
+    name: "Tailored Wool Blazer",
+    price: 199.00,
+    image: "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop",
+    tag: "NEW",
+    rating: 4.8,
+    reviews: 45,
+    colors: ["#1F2937", "#374151"]
+  },
+  {
+    id: "m5",
+    name: "Chino Shorts",
+    price: 45.00,
+    image: "https://images.unsplash.com/photo-1591195854234-9c5b4eaaab7c?q=80&w=800&auto=format&fit=crop",
+    rating: 4.2,
+    reviews: 67,
+    colors: ["#92400E", "#78716C"]
+  },
+  {
+    id: "m6",
+    name: "Casual Linen Shirt",
+    price: 65.00,
+    image: "https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=800&auto=format&fit=crop",
+    rating: 4.6,
+    reviews: 112,
+    colors: ["#F3F4F6", "#E5E7EB"]
+  },
+  {
+    id: "m7",
+    name: "Leather Bomber Jacket",
+    price: 250.00,
+    oldPrice: 320.00,
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop",
+    tag: "SALE",
+    rating: 5.0,
+    reviews: 210,
+    colors: ["#451A03", "#000000"]
+  },
+  {
+    id: "m8",
+    name: "Merino Wool Sweater",
+    price: 85.00,
+    image: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800&auto=format&fit=crop",
+    rating: 4.7,
+    reviews: 95,
+    colors: ["#7C2D12", "#1E3A8A", "#374151"]
+  },
+  {
+    id: "m9",
+    name: "Athletic Joggers",
+    price: 55.00,
+    image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=800&auto=format&fit=crop",
+    rating: 4.3,
+    reviews: 150,
+    colors: ["#000000", "#4B5563"]
+  },
+  {
+    id: "m10",
+    name: "Premium Polo Shirt",
+    price: 75.00,
+    image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop",
+    rating: 4.9,
+    reviews: 320,
+    colors: ["#000000", "#0F766E"]
+  },
+  {
+    id: "m11",
+    name: "Pleated Trousers",
+    price: 95.00,
+    image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=800&auto=format&fit=crop",
+    rating: 4.4,
+    reviews: 54,
+    colors: ["#374151", "#1F2937"]
+  },
+  {
+    id: "m12",
+    name: "Henley Long Sleeve",
+    price: 48.00,
+    image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=800&auto=format&fit=crop",
+    rating: 4.1,
+    reviews: 43,
+    colors: ["#57534E", "#292524"]
+  }
 ];
 
 export const trendingProducts = [
-  { id: 101, name: 'Ribbed Tank Top', price: 25.00, image: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=400&auto=format&fit=crop' },
-  { id: 102, name: 'Utility Overshirt', price: 75.00, image: 'https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=400&auto=format&fit=crop' },
-  { id: 103, name: 'Cargo Pants', price: 85.00, image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=400&auto=format&fit=crop' },
-  { id: 104, name: 'Short Sleeve Shirt', price: 45.00, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=400&auto=format&fit=crop' },
-  { id: 105, name: 'Knit Polo', price: 50.00, image: 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=400&auto=format&fit=crop' },
-  { id: 106, name: 'Linen Shirt', price: 65.00, image: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=400&auto=format&fit=crop' },
-  { id: 107, name: 'Tailored Shorts', price: 40.00, image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=400&auto=format&fit=crop' },
+  {
+    id: "t1",
+    name: "Leather Bomber Jacket",
+    price: 250.00,
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "t2",
+    name: "Premium Polo Shirt",
+    price: 75.00,
+    image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "t3",
+    name: "Slim Fit Denim Jeans",
+    price: 89.00,
+    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "t4",
+    name: "Tailored Wool Blazer",
+    price: 199.00,
+    image: "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "t5",
+    name: "Merino Wool Sweater",
+    price: 85.00,
+    image: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: "t6",
+    name: "Classic Oxford Shirt",
+    price: 59.00,
+    image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=800&auto=format&fit=crop"
+  }
 ];

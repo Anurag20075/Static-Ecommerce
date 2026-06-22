@@ -40,8 +40,8 @@ export const instagramPosts = [
   { id: 4, image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&h=300&fit=crop", likes: "956" },
   { id: 5, image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=300&fit=crop", likes: "1.5k" },
   { id: 6, image: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=300&h=300&fit=crop", likes: "723" },
-  { id: 7, image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=300&h=300&fit=crop", likes: "1.8k" },
-  { id: 8, image: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=300&h=300&fit=crop", likes: "1.1k" },
+  // { id: 7, image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=300&h=300&fit=crop", likes: "1.8k" },
+  // { id: 8, image: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=300&h=300&fit=crop", likes: "1.1k" },
 ];
 
 export const features = [

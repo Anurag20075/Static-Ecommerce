@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Main from "./Component/Main";
 import Navbar from "./Component/Navbar";
 import Footer from "./Component/Footer";
-import Categories from "./Component/Categories";
 import Contact from "./Component/Contact";
 import CartCheckout from "./Component/CartCheckout";
-import DetailPage from "./Component/DetailedPage";
+// import DetailPage from "./Component/DetailedPage";
+// import MensCategories from "./Component/MensCategories";
+import Categories from "./Component/Categories";
 function App() {
     return (
         <Router>
