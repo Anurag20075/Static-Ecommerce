@@ -168,8 +168,6 @@ const Contact = () => {
           </div>
         </div>
       </section>
-
-      {/* Service Cards Section */}
       <section className="max-w-7xl mx-auto px-6 md:px-12 py-24">
         <div className="text-center max-w-xl mx-auto mb-16">
           <p className="uppercase tracking-[0.3em] text-xs font-semibold text-neutral-400 mb-3">Tailored Channels</p>

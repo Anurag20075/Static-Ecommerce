@@ -6,7 +6,7 @@ import Navbar from "./Component/Navbar";
 import Footer from "./Component/Footer";
 import Contact from "./Component/Contact";
 import CartCheckout from "./Component/CartCheckout";
-// import DetailPage from "./Component/DetailedPage";
+import DetailPage from "./Component/DetailedPage";
 // import MensCategories from "./Component/MensCategories";
 import Categories from "./Component/Categories";
 function App() {
@@ -20,7 +20,7 @@ function App() {
                 <Route path="/" element={<Main />} />
 
                 <Route path="/categories" element={<Categories />} />
-
+                <Route path="/product/:id" element={<DetailPage />} />
                 <Route path="/contact" element={<Contact />} />
             </Routes>
 
@@ -32,3 +32,4 @@ function App() {
 }
 
 export default App;
+
