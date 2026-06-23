@@ -13,6 +13,7 @@ import {
     Leaf,
 } from "lucide-react";
 import { useCart } from "./CartContext";
+import { useNavigate } from "react-router-dom";
 
 import {
     categories,
@@ -23,152 +24,172 @@ import {
     features,
 } from "../data/mockData";
 
-// Map string names to actual Lucide Icon components
 const iconMap = {
     Award,
     Truck,
     Leaf,
 };
 
-// ============================================
-// HERO COMPONENT
-// ============================================
-const Hero = () => (
-    <section className="relative h-[88vh] min-h-[600px] w-full overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
-            <img
-                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=80"
-                alt="LUXORA Hero — modern fashion editorial"
-                className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        </div>
+const Hero = () => {
+    const navigate = useNavigate();
 
-        {/* Content */}
-        <div className="relative h-full mx-auto max-w-[1400px] px-5 lg:px-10 flex flex-col justify-center">
+    return (
+        <section className="relative h-[88vh] min-h-[600px] w-full overflow-hidden">
+            <div className="absolute inset-0">
+                <img
+                    src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=80"
+                    alt="LUXORA Hero — modern fashion editorial"
+                    className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            </div>
+
+            <div className="relative h-full mx-auto max-w-[1400px] px-5 lg:px-10 flex flex-col justify-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    className="max-w-2xl text-white"
+                >
+                    <motion.span
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1, duration: 0.6 }}
+                        className="inline-block text-[11px] tracking-[0.3em] font-medium mb-5 border-b border-white/40 pb-2"
+                    >
+                        SPRING / SUMMER 2024
+                    </motion.span>
+
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.8 }}
+                        className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[1.05] tracking-tight"
+                    >
+                        Redefining
+                        <br />
+                        Modern Fashion
+                    </motion.h1>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.6 }}
+                        className="mt-6 max-w-md text-base md:text-lg text-white/85 leading-relaxed"
+                    >
+                        Premium clothing designed for confidence, comfort, and
+                        style. Crafted with intention, made to last.
+                    </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.55, duration: 0.6 }}
+                        className="mt-9 flex flex-wrap gap-3"
+                    >
+                        <a
+                            href="/categories#best-sellers"
+                            className="group inline-flex items-center gap-2 bg-white text-black px-7 py-3.5 text-[12px] font-semibold tracking-[0.15em] hover:bg-black hover:text-white transition-all duration-300"
+                        >
+                            SHOP COLLECTION
+                            <ArrowRight
+                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                                strokeWidth={2}
+                            />
+                        </a>
+                        <button
+                            onClick={() => navigate("/categories")}
+                            className="group inline-flex items-center gap-2 border border-white/70 text-white px-7 py-3.5 text-[12px] font-semibold tracking-[0.15em] hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm"
+                        >
+                            EXPLORE CATEGORIES
+                            <ArrowRight
+                                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                                strokeWidth={2}
+                            />
+                        </button>
+                    </motion.div>
+                </motion.div>
+            </div>
             <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-2xl text-white"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2, duration: 0.8 }}
+                className="absolute bottom-7 left-1/2 -translate-x-1/2 text-white/70 text-[10px] tracking-[0.3em] flex flex-col items-center gap-2"
             >
-                <motion.span
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1, duration: 0.6 }}
-                    className="inline-block text-[11px] tracking-[0.3em] font-medium mb-5 border-b border-white/40 pb-2"
-                >
-                    SPRING / SUMMER 2024
-                </motion.span>
-
-                <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.8 }}
-                    className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium leading-[1.05] tracking-tight"
-                >
-                    Redefining
-                    <br />
-                    Modern Fashion
-                </motion.h1>
-
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
-                    className="mt-6 max-w-md text-base md:text-lg text-white/85 leading-relaxed"
-                >
-                    Premium clothing designed for confidence, comfort, and
-                    style. Crafted with intention, made to last.
-                </motion.p>
-
+                <span>SCROLL</span>
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.55, duration: 0.6 }}
-                    className="mt-9 flex flex-wrap gap-3"
-                >
-                    <a
-                        href="#best-sellers"
-                        className="group inline-flex items-center gap-2 bg-white text-black px-7 py-3.5 text-[12px] font-semibold tracking-[0.15em] hover:bg-black hover:text-white transition-all duration-300"
-                    >
-                        SHOP COLLECTION
-                        <ArrowRight
-                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                            strokeWidth={2}
-                        />
-                    </a>
-                    <a
-                        href="/categories"
-                        className="group inline-flex items-center gap-2 border border-white/70 text-white px-7 py-3.5 text-[12px] font-semibold tracking-[0.15em] hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-sm"
-                    >
-                        EXPLORE LOOKBOOK
-                        <ArrowRight
-                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                            strokeWidth={2}
-                        />
-                    </a>
-                </motion.div>
+                    animate={{ y: [0, 6, 0] }}
+                    transition={{
+                        repeat: Infinity,
+                        duration: 1.6,
+                        ease: "easeInOut",
+                    }}
+                    className="w-px h-7 bg-white/50"
+                />
             </motion.div>
-        </div>
+        </section>
+    );
+};
 
-        {/* Scroll indicator */}
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
-            className="absolute bottom-7 left-1/2 -translate-x-1/2 text-white/70 text-[10px] tracking-[0.3em] flex flex-col items-center gap-2"
-        >
-            <span>SCROLL</span>
-            <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{
-                    repeat: Infinity,
-                    duration: 1.6,
-                    ease: "easeInOut",
-                }}
-                className="w-px h-7 bg-white/50"
-            />
-        </motion.div>
-    </section>
-);
+const CategoryGrid = () => {
+    const navigate = useNavigate();
 
-// ============================================
-// OTHER COMPONENTS
-// ============================================
-const CategoryGrid = () => (
-    <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {categories.map((cat, i) => (
-                <motion.div
-                    key={cat.title}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="relative group cursor-pointer overflow-hidden aspect-[3/4]"
+    const handleCategoryClick = (cat) => {
+        navigate(`/categories?category=${encodeURIComponent(cat.title.toLowerCase())}`);
+    };
+
+    return (
+        <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+            <div className="flex items-end justify-between mb-8">
+                <div>
+                    <span className="text-[11px] tracking-[0.3em] text-black/50 font-medium block mb-2">
+                        BROWSE BY
+                    </span>
+                    <h2 className="text-sm font-medium tracking-widest">CATEGORIES</h2>
+                </div>
+                <a
+                    href="/categories"
+                    className="group text-xs tracking-widest text-black/60 hover:text-[#c4a882] transition-colors inline-flex items-center gap-1.5"
                 >
-                    <img
-                        src={cat.img}
-                        alt={cat.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    VIEW ALL CATEGORIES
+                    <ArrowRight
+                        size={13}
+                        className="transition-transform group-hover:translate-x-1"
                     />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                        <h3 className="font-serif text-2xl mb-2">
-                            {cat.title}
-                        </h3>
-                        <span className="text-xs tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">
-                            SHOP NOW <ArrowRight size={14} />
-                        </span>
-                    </div>
-                </motion.div>
-            ))}
-        </div>
-    </section>
-);
+                </a>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {categories.map((cat, i) => (
+                    <motion.div
+                        key={cat.title}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        onClick={() => handleCategoryClick(cat)}
+                        className="relative group cursor-pointer overflow-hidden aspect-[3/4]"
+                    >
+                        <img
+                            src={cat.img}
+                            alt={cat.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+                        <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <h3 className="font-serif text-2xl mb-2">
+                                {cat.title}
+                            </h3>
+                            <span className="text-xs tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">
+                                SHOP NOW <ArrowRight size={14} />
+                            </span>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+        </section>
+    );
+};
 
 const ProductCard = ({ product, onAddToCart }) => {
     const [isLiked, setIsLiked] = useState(false);
@@ -245,15 +266,24 @@ const ProductCard = ({ product, onAddToCart }) => {
 const BestSellers = ({ onAddToCart }) => (
     <section id="best-sellers" className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="flex justify-between items-end mb-8">
-            <h2 className="text-sm font-medium tracking-widest">
-                BEST SELLERS
-            </h2>
+            <div>
+                <span className="text-[11px] tracking-[0.3em] text-black/50 font-medium block mb-2">
+                    CURATED FOR YOU
+                </span>
+                <h2 className="text-sm font-medium tracking-widest">
+                    BEST SELLERS
+                </h2>
+            </div>
             <div className="flex items-center gap-4">
                 <a
-                    href="#"
-                    className="text-xs tracking-widest hover:text-[#c4a882] transition-colors"
+                    href="/categories#best-sellers"
+                    className="group text-xs tracking-widest text-black/60 hover:text-[#c4a882] transition-colors inline-flex items-center gap-1.5"
                 >
                     VIEW ALL
+                    <ArrowRight
+                        size={13}
+                        className="transition-transform group-hover:translate-x-1"
+                    />
                 </a>
                 <div className="flex gap-2">
                     <button className="p-1 hover:text-[#c4a882]">
@@ -287,17 +317,26 @@ const NewArrivals = () => {
     };
 
     return (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <section id="new-arrivals" className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
             <div className="flex justify-between items-end mb-8">
-                <h2 className="text-sm font-medium tracking-widest">
-                    NEW ARRIVALS
-                </h2>
+                <div>
+                    <span className="text-[11px] tracking-[0.3em] text-black/50 font-medium block mb-2">
+                        JUST DROPPED
+                    </span>
+                    <h2 className="text-sm font-medium tracking-widest">
+                        NEW ARRIVALS
+                    </h2>
+                </div>
                 <div className="flex items-center gap-4">
                     <a
-                        href="#"
-                        className="text-xs tracking-widest hover:text-[#c4a882] transition-colors"
+                        href="/categories#new-arrivals"
+                        className="group text-xs tracking-widest text-black/60 hover:text-[#c4a882] transition-colors inline-flex items-center gap-1.5"
                     >
                         VIEW ALL
+                        <ArrowRight
+                            size={13}
+                            className="transition-transform group-hover:translate-x-1"
+                        />
                     </a>
                     <div className="flex gap-2">
                         <button
@@ -367,13 +406,17 @@ const TrendingBanner = () => (
                     <br />
                     and effortless nights.
                 </p>
-                <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-[#1a1a1a] text-white px-8 py-3 text-xs font-medium tracking-wider hover:bg-gray-800 transition-colors"
+                <a
+                    href="/categories#new-arrivals"
                 >
-                    SHOP THE COLLECTION
-                </motion.button>
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="bg-[#1a1a1a] text-white px-8 py-3 text-xs font-medium tracking-wider hover:bg-gray-800 transition-colors"
+                    >
+                        SHOP THE COLLECTION
+                    </motion.button>
+                </a>
             </motion.div>
         </div>
     </section>
@@ -384,7 +427,6 @@ const BrandStory = () => {
         <section className="py-20 lg:py-28 bg-[#f6f4ef]">
             <div className="mx-auto max-w-[1400px] px-5 lg:px-10">
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                    {/* Text */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -445,7 +487,6 @@ const BrandStory = () => {
                         </a>
                     </motion.div>
 
-                    {/* Image */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.97 }}
                         whileInView={{ opacity: 1, scale: 1 }}
