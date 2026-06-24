@@ -369,8 +369,6 @@ function Categories() {
                         </button>
                     ))}
                 </div>
-
-                {/* ── Active filter pill (only when not "all") ──────── */}
                 <AnimatePresence>
                     {filter !== "all" && (
                         <motion.div
