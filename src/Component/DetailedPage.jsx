@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Minus, Plus, ChevronDown, ChevronUp, ShoppingBag, Check } from "lucide-react";
+import { ArrowLeft, Minus, Plus, ChevronDown, ChevronUp, ShoppingBag, Check, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext";
 
-// Import real product data to use for the "You may also like" section
 import { products as mensProducts } from "../data/CategoriesData";
 import { products as womensProducts } from "../data/WomenCategoriesData";
 
@@ -17,9 +16,13 @@ export default function DetailPage() {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("M");
+  const [selectedColor, setSelectedColor] = useState(null);
   const [openAccordion, setOpenAccordion] = useState(null);
   const [isAdded, setIsAdded] = useState(false);
-
+  const [showToast, setShowToast] = useState(false);
+  const [lastAdded, setLastAdded] = useState(null);
+  const [sizeConfirmed, setSizeConfirmed] = useState(false);
+  const [colorConfirmed, setColorConfirmed] = useState(false);
 
   const product = passedProduct || {
     id: 1,
@@ -27,6 +30,8 @@ export default function DetailPage() {
     category: "Outerwear / Fall Collection",
     price: 245.00,
     image: null,
+    colors: ["#1a1a1a", "#8B7355", "#D2B48C"],
+    colorNames: ["Black", "Camel", "Tan"],
     customizable: true,
     description:
       "Crafted from a premium wool blend, this oversized coat offers a relaxed silhouette without compromising on structure. Designed with dropped shoulders and a notched lapel, it is the definitive piece for transitional dressing.",
@@ -37,47 +42,168 @@ export default function DetailPage() {
     ]
   };
 
-  const sizes = ["XS", "S", "M", "L", "XL"];
+  // Auto-select first color on mount
+  useEffect(() => {
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
+      setSelectedColor(product.colors[0]);
+    }
+  }, [product.colors]);
 
+  const sizes = ["XS", "S", "M", "L", "XL"];
 
   const related = useMemo(() => {
     const allProducts = [...womensProducts, ...mensProducts];
-    const filtered = allProducts.filter(p => p.id !== product.id);
-    return filtered.slice(0, 4);
+    return allProducts.filter(p => p.id !== product.id).slice(0, 4);
   }, [product.id]);
 
   const priceDisplay = useMemo(() => {
     return `$${(product.price * quantity).toFixed(2)}`;
   }, [quantity, product.price]);
 
+  // Resolve color name — NEVER returns hex
+  const selectedColorName = useMemo(() => {
+    if (!selectedColor) return null;
+    if (!product.colorNames || !product.colors) return null; // No names? Return null, not hex
+    const index = product.colors.indexOf(selectedColor);
+    if (index !== -1 && product.colorNames[index]) {
+      return product.colorNames[index];
+    }
+    return null; // Fallback to null instead of hex
+  }, [selectedColor, product.colors, product.colorNames]);
+
   const handleQuantity = (type) => {
-    if (type === "inc") setQuantity((prev) => prev + 1);
-    if (type === "dec") setQuantity((prev) => Math.max(1, prev - 1));
+    if (type === "inc") setQuantity(prev => prev + 1);
+    if (type === "dec") setQuantity(prev => Math.max(1, prev - 1));
+  };
+
+  const handleSizeSelect = (size) => {
+    setSelectedSize(size);
+    setSizeConfirmed(false);
+  };
+
+  const handleColorSelect = (color) => {
+    setSelectedColor(color);
+    setColorConfirmed(false);
   };
 
   const toggleAccordion = (index) => {
     setOpenAccordion(openAccordion === index ? null : index);
   };
 
+  const resetStates = () => {
+    setSelectedSize("M");
+    setQuantity(1);
+    setSizeConfirmed(false);
+    setColorConfirmed(false);
+    setIsAdded(false);
+    setShowToast(false);
+    setLastAdded(null);
+  };
+
   const handleAddToCart = () => {
-    addToCart({
+    const cartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image,
       selectedSize: selectedSize,
-      quantity: quantity
-    });
+      selectedColor: selectedColor,
+      selectedColorName: selectedColorName, // null if no colorNames in data
+      quantity: quantity,
+      category: product.category,
+      gender: product.gender,
+    };
+
+    addToCart(cartItem);
+
+    const toastDetails = {
+      name: product.name,
+      size: selectedSize,
+      color: selectedColorName || null, // null if no name — toast will show dot instead
+      colorHex: selectedColor || null,  // for rendering dot in toast
+      hasColors: !!product.colors,
+      quantity: quantity,
+      total: (product.price * quantity).toFixed(2),
+    };
+
+    setLastAdded(toastDetails);
     setIsAdded(true);
+    setSizeConfirmed(true);
+    setColorConfirmed(true);
+    setShowToast(true);
+
+    setTimeout(() => setShowToast(false), 3000);
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  const whatsappLink = `https://wa.me/916398802517?text=${encodeURIComponent(
-    `Hello, I am interested in the ${product.name}. Size: ${selectedSize}. Quantity: ${quantity}.`
-  )}`;
+  // Button subtitle — always clean, never hex
+  const buttonSubtitle = useMemo(() => {
+    let text = `SIZE ${selectedSize}`;
+    if (product.colors && selectedColorName) {
+      text += ` · ${selectedColorName}`;
+    }
+    return text;
+  }, [selectedSize, selectedColorName, product.colors]);
+
+  // WhatsApp message
+  const whatsappMessage = useMemo(() => {
+    let msg = `Hello, I am interested in the ${product.name}. Size: ${selectedSize}.`;
+    if (product.colors && selectedColorName) {
+      msg += ` Color: ${selectedColorName}.`;
+    }
+    msg += ` Quantity: ${quantity}.`;
+    return msg;
+  }, [product.name, selectedSize, selectedColorName, product.colors, quantity]);
+
+  const whatsappLink = `https://wa.me/916398802517?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans antialiased pb-24 lg:pb-0">
+
+      {/* ========== TOAST — Shows color dot if no name ========== */}
+      <AnimatePresence>
+        {showToast && lastAdded && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: -20, x: "-50%" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="fixed top-20 left-1/2 z-[100] bg-neutral-900 text-white px-6 py-4 rounded-sm shadow-2xl flex items-center gap-4 min-w-[320px] max-w-[90vw]"
+          >
+            <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs tracking-wider uppercase text-neutral-400 mb-0.5">Added to cart</p>
+              <p className="text-sm font-light truncate">{lastAdded.name}</p>
+              <p className="text-xs text-neutral-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                <span>Size: <span className="text-white font-medium">{lastAdded.size}</span></span>
+                {lastAdded.hasColors && (
+                  <span className="flex items-center gap-1">
+                    · Color:{" "}
+                    {lastAdded.color ? (
+                      <span className="text-white font-medium">{lastAdded.color}</span>
+                    ) : lastAdded.colorHex ? (
+                      <span
+                        className="inline-block w-3 h-3 rounded-full border border-white/30 flex-shrink-0"
+                        style={{ backgroundColor: lastAdded.colorHex }}
+                      />
+                    ) : null}
+                  </span>
+                )}
+                <span>· Qty: {lastAdded.quantity} · ${lastAdded.total}</span>
+              </p>
+            </div>
+            <button
+              onClick={() => setShowToast(false)}
+              className="text-neutral-500 hover:text-white transition-colors flex-shrink-0"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Minimalist Header */}
       <div className="flex justify-between items-center px-6 md:px-12 py-6 border-b border-neutral-100 sticky top-0 bg-white/90 backdrop-blur-md z-40">
         <button
@@ -87,9 +213,7 @@ export default function DetailPage() {
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
-        <h1 className="text-sm tracking-[0.2em] uppercase font-light text-neutral-600">
-          Luxora
-        </h1>
+        <h1 className="text-sm tracking-[0.2em] uppercase font-light text-neutral-600">Luxora</h1>
         <div className="w-10" />
       </div>
 
@@ -97,7 +221,7 @@ export default function DetailPage() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
-          {/* Dynamic Image Area */}
+          {/* Image */}
           <div className="flex flex-col gap-4">
             <div className="aspect-[3/4] w-full bg-neutral-100 rounded-sm overflow-hidden relative">
               <AnimatePresence mode="wait">
@@ -125,7 +249,7 @@ export default function DetailPage() {
             </div>
           </div>
 
-          {/* Product Details */}
+          {/* Details */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -155,41 +279,180 @@ export default function DetailPage() {
               </p>
             </div>
 
-            {/* Colors */}
-            {product.colors && (
+            {/* ===== COLOR SELECTOR ===== */}
+            {product.colors && product.colors.length > 0 && (
               <div className="mt-8">
-                <label className="block text-xs tracking-[0.15em] uppercase text-neutral-500 mb-4">Color</label>
-                <div className="flex gap-3">
-                  {product.colors.map((c, i) => (
-                    <div key={i} className="w-6 h-6 rounded-full border-2 border-neutral-200 hover:border-neutral-900 transition-colors cursor-pointer" style={{ backgroundColor: c }} />
-                  ))}
+                <div className="flex justify-between items-center mb-4">
+                  <label className="block text-xs tracking-[0.15em] uppercase text-neutral-500">
+                    Color
+                    <AnimatePresence mode="wait">
+                      {selectedColorName && (
+                        <motion.span
+                          key={selectedColor}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 8 }}
+                          transition={{ duration: 0.2 }}
+                          className="ml-2 text-neutral-900 font-medium normal-case tracking-normal"
+                        >
+                          — {selectedColorName}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </label>
+                  <span className="text-xs text-neutral-400">
+                    {product.colors.length} option{product.colors.length > 1 ? "s" : ""}
+                  </span>
                 </div>
+                <div className="flex gap-3">
+                  {product.colors.map((color, i) => {
+                    const name = product.colorNames?.[i] || null;
+                    const isSelected = selectedColor === color;
+
+                    return (
+                      <div key={i} className="relative">
+                        <motion.button
+                          onClick={() => handleColorSelect(color)}
+                          whileTap={{ scale: 0.9 }}
+                          className={`relative w-9 h-9 rounded-full transition-all duration-300 flex items-center justify-center
+                            ${isSelected
+                              ? "ring-2 ring-neutral-900 ring-offset-2"
+                              : "ring-1 ring-neutral-200 hover:ring-neutral-400"
+                            }
+                            ${colorConfirmed && isSelected ? "ring-2 !ring-green-500 !ring-offset-2" : ""}
+                          `}
+                          style={{ backgroundColor: color }}
+                          title={name || color}
+                        >
+                          <AnimatePresence>
+                            {isSelected && (
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                exit={{ scale: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="w-3 h-3 rounded-full border-2 border-white"
+                                style={{ backgroundColor: color }}
+                              />
+                            )}
+                          </AnimatePresence>
+                        </motion.button>
+
+                        {/* Name label under selected swatch */}
+                        <AnimatePresence>
+                          {isSelected && name && (
+                            <motion.p
+                              initial={{ opacity: 0, y: -4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -4 }}
+                              className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-neutral-500 whitespace-nowrap"
+                            >
+                              {name}
+                            </motion.p>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Green checkmark after add */}
+                        <AnimatePresence>
+                          {colorConfirmed && isSelected && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0 }}
+                              className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center z-10"
+                            >
+                              <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Confirmed text — only if name exists, otherwise skip */}
+                <AnimatePresence>
+                  {colorConfirmed && selectedColorName && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-6 text-xs text-green-600 flex items-center gap-1.5 overflow-hidden"
+                    >
+                      <Check className="w-3 h-3" />
+                      {selectedColorName} selected & added to cart
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             )}
 
-            {/* Size Selector */}
+            {/* ===== SIZE SELECTOR ===== */}
             <div className="mt-8">
               <div className="flex justify-between items-center mb-4">
-                <label className="block text-xs tracking-[0.15em] uppercase text-neutral-500">Select Size</label>
+                <label className="block text-xs tracking-[0.15em] uppercase text-neutral-500">
+                  Select Size
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={selectedSize}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 8 }}
+                      transition={{ duration: 0.2 }}
+                      className="ml-2 text-neutral-900 font-medium normal-case tracking-normal"
+                    >
+                      — {selectedSize}
+                    </motion.span>
+                  </AnimatePresence>
+                </label>
                 <button className="text-xs underline text-neutral-400 hover:text-neutral-900 transition-colors">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-3">
                 {sizes.map((size) => (
-                  <button
+                  <motion.button
                     key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`w-14 h-14 border flex items-center justify-center text-sm transition-all duration-300 ${selectedSize === size
+                    onClick={() => handleSizeSelect(size)}
+                    whileTap={{ scale: 0.95 }}
+                    className={`relative w-14 h-14 border flex items-center justify-center text-sm transition-all duration-300 overflow-hidden
+                      ${selectedSize === size
                         ? "bg-neutral-900 text-white border-neutral-900"
                         : "bg-white text-neutral-700 border-neutral-200 hover:border-neutral-900"
-                      }`}
+                      }
+                      ${sizeConfirmed && selectedSize === size ? "ring-2 ring-green-500 ring-offset-2" : ""}
+                    `}
                   >
                     {size}
-                  </button>
+                    <AnimatePresence>
+                      {sizeConfirmed && selectedSize === size && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center"
+                        >
+                          <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
                 ))}
               </div>
+              <AnimatePresence>
+                {sizeConfirmed && (
+                  <motion.p
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-3 text-xs text-green-600 flex items-center gap-1.5 overflow-hidden"
+                  >
+                    <Check className="w-3 h-3" />
+                    Size {selectedSize} selected & added to cart
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Quantity Selector */}
+            {/* Quantity */}
             <div className="mt-8">
               <label className="block text-xs tracking-[0.15em] uppercase text-neutral-500 mb-4">Quantity</label>
               <div className="flex items-center border border-neutral-200 w-max">
@@ -203,14 +466,17 @@ export default function DetailPage() {
               </div>
             </div>
 
-            {/* CTA Buttons (Desktop) */}
+            {/* CTA Desktop */}
             <div className="mt-10 flex flex-col gap-3 hidden sm:block">
               <button
                 onClick={handleAddToCart}
-                className={`w-full flex items-center justify-center gap-2 text-sm tracking-[0.15em] uppercase py-5 transition-all duration-300 ${isAdded ? "bg-green-600 text-white" : "bg-neutral-900 hover:bg-neutral-800 text-white"
-                  }`}
+                className={`w-full flex items-center justify-center gap-2 text-sm tracking-[0.15em] uppercase py-5 transition-all duration-300
+                  ${isAdded ? "bg-green-600 text-white" : "bg-neutral-900 hover:bg-neutral-800 text-white"}`}
               >
-                {isAdded ? <><Check className="w-4 h-4" /> ADDED TO BAG</> : <><ShoppingBag className="w-4 h-4" /> ADD TO BAG</>}
+                {isAdded
+                  ? <><Check className="w-4 h-4" /> ADDED TO CART — {buttonSubtitle}</>
+                  : <><ShoppingBag className="w-4 h-4" /> ADD TO CART — {buttonSubtitle}</>
+                }
               </button>
               <a
                 href={whatsappLink}
@@ -222,7 +488,7 @@ export default function DetailPage() {
               </a>
             </div>
 
-            {/* Accordion Lists */}
+            {/* Accordion */}
             <div className="mt-12 border-t border-neutral-200">
               {(product.details || []).map((detail, index) => (
                 <div key={index} className="border-b border-neutral-200 py-4">
@@ -252,12 +518,9 @@ export default function DetailPage() {
           </motion.div>
         </div>
 
-        {/* --- UPDATED Related Products with Real Clothes --- */}
+        {/* Related */}
         <div className="mt-24 md:mt-32 border-t border-neutral-100 pt-16">
-          <h3 className="font-serif text-2xl md:text-3xl font-light text-center mb-12">
-            You may also like
-          </h3>
-
+          <h3 className="font-serif text-2xl md:text-3xl font-light text-center mb-12">You may also like</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
             {related.map((item, index) => (
               <motion.div
@@ -266,27 +529,25 @@ export default function DetailPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                onClick={() => navigate(`/product/${item.id}`, { state: { product: item } })}
+                onClick={() => {
+                  resetStates();
+                  if (item.colors?.length > 0) setSelectedColor(item.colors[0]);
+                  else setSelectedColor(null);
+                  navigate(`/product/${item.id}`, { state: { product: item } });
+                }}
                 className="group cursor-pointer"
               >
                 <div className="aspect-[3/4] w-full bg-neutral-100 rounded-sm overflow-hidden relative mb-4">
-                  {/* Real Unsplash Image */}
                   <img
                     src={item.image}
                     alt={item.name}
                     className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
-                  {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 </div>
-
                 <div className="flex flex-col items-center text-center md:items-start md:text-left">
-                  <h4 className="font-light text-neutral-900 text-sm md:text-base tracking-wide">
-                    {item.name}
-                  </h4>
-                  <p className="text-neutral-500 text-xs md:text-sm font-light mt-1">
-                    ${item.price.toFixed(2)}
-                  </p>
+                  <h4 className="font-light text-neutral-900 text-sm md:text-base tracking-wide">{item.name}</h4>
+                  <p className="text-neutral-500 text-xs md:text-sm font-light mt-1">${item.price.toFixed(2)}</p>
                 </div>
               </motion.div>
             ))}
@@ -302,10 +563,13 @@ export default function DetailPage() {
         </div>
         <button
           onClick={handleAddToCart}
-          className={`flex-1 text-center text-white text-xs tracking-widest uppercase py-4 font-medium transition-colors flex items-center justify-center gap-2 ${isAdded ? 'bg-green-600' : 'bg-neutral-900'
-            }`}
+          className={`flex-1 text-center text-white text-[10px] sm:text-xs tracking-widest uppercase py-4 font-medium transition-colors flex items-center justify-center gap-1.5
+            ${isAdded ? 'bg-green-600' : 'bg-neutral-900'}`}
         >
-          {isAdded ? <><Check className="w-3.5 h-3.5" /> ADDED</> : <><ShoppingBag className="w-3.5 h-3.5" /> ADD TO BAG</>}
+          {isAdded
+            ? <><Check className="w-3.5 h-3.5" /> ADDED</>
+            : <><ShoppingBag className="w-3.5 h-3.5" /> ADD {buttonSubtitle}</>
+          }
         </button>
         <a
           href={whatsappLink}

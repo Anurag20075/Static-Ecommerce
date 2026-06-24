@@ -4,17 +4,17 @@ import {
     ChevronRight,
     ChevronLeft,
     Heart,
-    ShoppingBag,
+    Eye,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
-// Men's data
+
 import { products as mensProducts, trendingProducts as mensTrending } from "../data/CategoriesData";
-// Women's data
+
 import { products as womensProducts, trendingProducts as womensTrending } from "../data/WomenCategoriesData";
 
-// ─── Hero configs ────────────────────────────────────────────────────
+
 const heroConfig = {
     all: {
         image:
@@ -42,7 +42,6 @@ const heroConfig = {
     },
 };
 
-// ─── Hero ────────────────────────────────────────────────────────────
 const Hero = ({ filter }) => {
     const cfg = heroConfig[filter];
     return (
@@ -99,8 +98,13 @@ const Hero = ({ filter }) => {
     );
 };
 
-const ProductCard = ({ product, onAddToCart }) => {
+const ProductCard = ({ product }) => {
     const navigate = useNavigate();
+
+    const handleCheckProduct = (e) => {
+        e.stopPropagation();
+        navigate(`/product/${product.id}`, { state: { product } });
+    };
 
     return (
         <motion.div
@@ -166,19 +170,14 @@ const ProductCard = ({ product, onAddToCart }) => {
             </div>
 
             <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onAddToCart(product);
-                }}
+                onClick={handleCheckProduct}
                 className="w-full bg-neutral-900 text-white text-xs font-semibold tracking-wider py-2.5 rounded-sm hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
             >
-                <ShoppingBag size={14} /> QUICK ADD
+                <Eye size={14} /> CHECK PRODUCT
             </button>
         </motion.div>
     );
 };
-
-// --- REPLACE EXISTING MiniProductCard WITH THIS ---
 const MiniProductCard = ({ product, showGender, onAddToCart }) => {
     const navigate = useNavigate();
 
@@ -448,7 +447,6 @@ function Categories() {
                             <ProductCard
                                 key={product.id}
                                 product={product}
-                                onAddToCart={addToCart}
                             />
                         ))}
                         <PromoBanner filter={filter} />
@@ -554,4 +552,3 @@ function Categories() {
 }
 
 export default Categories;
-

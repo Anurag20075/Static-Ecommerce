@@ -6,54 +6,50 @@ export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
 
-    const addToCart = (product, selectedSize = "M") => {
+    // Now accepts a SINGLE object from DetailPage
+    // (which already has selectedSize, selectedColor, selectedColorName, quantity)
+    const addToCart = (cartItem) => {
         setCartItems((prev) => {
-            const existing = prev.find(
+            // Check for duplicate: same product + same size + same color
+            const existingIndex = prev.findIndex(
                 (item) =>
-                    item.id === product.id && item.selectedSize === selectedSize
+                    item.id === cartItem.id &&
+                    item.selectedSize === cartItem.selectedSize &&
+                    item.selectedColor === cartItem.selectedColor
             );
 
-            if (existing) {
-                return prev.map((item) =>
-                    item.id === product.id && item.selectedSize === selectedSize
-                        ? {
-                              ...item,
-                              quantity: item.quantity + 1,
-                          }
+            if (existingIndex !== -1) {
+                // Same exact variant exists → increment quantity
+                return prev.map((item, i) =>
+                    i === existingIndex
+                        ? { ...item, quantity: item.quantity + cartItem.quantity }
                         : item
                 );
             }
 
-            return [
-                ...prev,
-                {
-                    ...product,
-                    selectedSize,
-                    quantity: 1,
-                },
-            ];
+            // New variant → add as fresh entry
+            return [...prev, { ...cartItem }];
         });
 
         setIsCartOpen(true);
     };
 
-    const updateQuantity = (id, change) => {
+    // Index-based — safe for duplicate products in different sizes/colors
+    const updateQuantity = (index, change) => {
         setCartItems((prev) =>
             prev
-                .map((item) =>
-                    item.id === id
-                        ? {
-                              ...item,
-                              quantity: item.quantity + change,
-                          }
+                .map((item, i) =>
+                    i === index
+                        ? { ...item, quantity: item.quantity + change }
                         : item
                 )
                 .filter((item) => item.quantity > 0)
         );
     };
 
-    const removeItem = (id) => {
-        setCartItems((prev) => prev.filter((item) => item.id !== id));
+    // Index-based removal
+    const removeItem = (index) => {
+        setCartItems((prev) => prev.filter((_, i) => i !== index));
     };
 
     const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);

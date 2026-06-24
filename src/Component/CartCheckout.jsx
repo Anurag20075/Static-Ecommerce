@@ -23,21 +23,21 @@ export default function CartCheckout() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // 3. Calculation Logic
     const subtotal = cartItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
     );
     const shipping = 0.0;
     const total = subtotal + shipping;
+
     const handleWhatsAppCheckout = (e) => {
         e.preventDefault();
         if (cartItems.length === 0) return alert("Your cart is empty!");
 
         const sellerWhatsAppNumber = "+916398802517";
 
-        let message = ` *NEW ORDER RECEIVED!*\n\n`;
-        message += ` *Customer Details:*\n`;
+        let message = `*NEW ORDER RECEIVED!*\n\n`;
+        message += `*Customer Details:*\n`;
         message += `Name: ${formData.name}\n`;
         message += `Phone: ${formData.phone}\n`;
         message += `Address: ${formData.address}\n\n`;
@@ -46,45 +46,37 @@ export default function CartCheckout() {
         cartItems.forEach((item, index) => {
             message += `${index + 1}. ${item.name}\n`;
             message += `   Size: ${item.selectedSize}\n`;
+
+            // ← COLOR ADDED TO WHATSAPP MESSAGE
+            if (item.selectedColorName) {
+                message += `   Color: ${item.selectedColorName}\n`;
+            } else if (item.selectedColor) {
+                message += `   Color: ${item.selectedColor}\n`;
+            }
+
             message += `   Qty: ${item.quantity}\n`;
-            message += `   Price: $${(item.price * item.quantity).toFixed(
-                2
-            )}\n\n`;
+            message += `   Price: $${(item.price * item.quantity).toFixed(2)}\n\n`;
         });
 
-        message += ` *Total Amount:* $${total.toFixed(2)}\n`;
+        message += `*Total Amount:* $${total.toFixed(2)}\n`;
         message += `---------------------------------\n`;
         message += `Please confirm availability and share payment details.`;
 
         const encodedMessage = encodeURIComponent(message);
         const whatsAppUrl = `https://wa.me/${sellerWhatsAppNumber}?text=${encodedMessage}`;
-
         window.open(whatsAppUrl, "_blank");
-
-        // Order सेंड होने के बाद आप चाहें तो कार्ट खाली कर सकते हैं:
-        // setCartItems([]);
     };
 
     if (!isCartOpen) return null;
+
     return (
         <>
-            {/* Trigger Button: अगर Drawer बंद हो तो उसे खोलने के लिए */}
-            {/* {!isCartOpen && (
-                <button
-                    onClick={() => setIsCartOpen(true)}
-                    className="flex items-center gap-2 bg-zinc-900 text-white px-6 py-3 rounded-full hover:bg-zinc-800 transition-all font-medium shadow-lg"
-                >
-                    <ShoppingBag className="w-5 h-5" />
-                    Open Cart ({cartItems.length})
-                </button>
-            )} */}
-
-            {/* --- SLIDING DRAWER BACKDROP --- */}
+            {/* Backdrop */}
             {isCartOpen && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity duration-300 flex justify-end">
-                    {/* --- DRAWER PANEL --- */}
+                    {/* Drawer Panel */}
                     <div className="w-full max-w-xl bg-white h-screen flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
-                        {/* Drawer Header */}
+                        {/* Header */}
                         <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <ShoppingBag className="w-5 h-5 text-zinc-900" />
@@ -104,9 +96,9 @@ export default function CartCheckout() {
                             </button>
                         </div>
 
-                        {/* Drawer Body (Scrollable Split Container) */}
+                        {/* Scrollable Body */}
                         <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                            {/* 1. Item List */}
+                            {/* Item List */}
                             <div className="space-y-4">
                                 {cartItems.length === 0 ? (
                                     <div className="text-center py-12 text-zinc-400">
@@ -115,9 +107,10 @@ export default function CartCheckout() {
                                         </p>
                                     </div>
                                 ) : (
-                                    cartItems.map((item) => (
+                                    cartItems.map((item, index) => (
                                         <div
-                                            key={item.id}
+                                            // ← COMPOSITE KEY: handles same product in different size/color
+                                            key={`${item.id}-${item.selectedSize}-${item.selectedColor || "none"}-${index}`}
                                             className="flex gap-4 p-4 rounded-xl border border-zinc-100 bg-white shadow-sm transition-all hover:shadow-md"
                                         >
                                             <img
@@ -131,32 +124,54 @@ export default function CartCheckout() {
                                                         <h3 className="font-medium text-zinc-900 text-sm sm:text-base leading-snug">
                                                             {item.name}
                                                         </h3>
+                                                        {/* ← INDEX-BASED REMOVE */}
                                                         <button
                                                             onClick={() =>
-                                                                removeItem(
-                                                                    item.id
-                                                                )
+                                                                removeItem(index)
                                                             }
                                                             className="text-zinc-400 hover:text-red-500 transition-colors p-1"
                                                         >
                                                             <Trash2 className="w-4 h-4" />
                                                         </button>
                                                     </div>
-                                                    <p className="text-xs text-zinc-400 mt-1">
-                                                        Size:{" "}
-                                                        <span className="font-semibold text-zinc-700">
-                                                            {item.selectedSize}
-                                                        </span>
-                                                    </p>
+
+                                                    {/* ← SIZE + COLOR ROW */}
+                                                    <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                                                        <p className="text-xs text-zinc-400">
+                                                            Size:{" "}
+                                                            <span className="font-semibold text-zinc-700">
+                                                                {item.selectedSize}
+                                                            </span>
+                                                        </p>
+
+                                                        {/* Color dot + name — only if color exists */}
+                                                        {item.selectedColor && (
+                                                            <p className="text-xs text-zinc-400 flex items-center gap-1.5">
+                                                                Color:{" "}
+                                                                <span
+                                                                    className="inline-block w-3 h-3 rounded-full border border-zinc-200 flex-shrink-0"
+                                                                    style={{
+                                                                        backgroundColor:
+                                                                            item.selectedColor,
+                                                                    }}
+                                                                />
+                                                                {item.selectedColorName && (
+                                                                    <span className="font-semibold text-zinc-700">
+                                                                        {item.selectedColorName}
+                                                                    </span>
+                                                                )}
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                 </div>
 
                                                 <div className="flex justify-between items-center mt-2">
-                                                    {/* Quantity Block */}
+                                                    {/* ← INDEX-BASED QUANTITY */}
                                                     <div className="flex items-center border border-zinc-200 rounded-full bg-zinc-50">
                                                         <button
                                                             onClick={() =>
                                                                 updateQuantity(
-                                                                    item.id,
+                                                                    index,
                                                                     -1
                                                                 )
                                                             }
@@ -170,7 +185,7 @@ export default function CartCheckout() {
                                                         <button
                                                             onClick={() =>
                                                                 updateQuantity(
-                                                                    item.id,
+                                                                    index,
                                                                     1
                                                                 )
                                                             }
@@ -180,8 +195,7 @@ export default function CartCheckout() {
                                                         </button>
                                                     </div>
                                                     <span className="font-bold text-sm text-zinc-900">
-                                                        $
-                                                        {(
+                                                        $                                                         {(
                                                             item.price *
                                                             item.quantity
                                                         ).toFixed(2)}
@@ -197,7 +211,7 @@ export default function CartCheckout() {
                                 <>
                                     <hr className="border-zinc-100" />
 
-                                    {/* 2. Order Summary Details */}
+                                    {/* Order Summary */}
                                     <div className="bg-zinc-50 rounded-2xl p-5 border border-zinc-100 space-y-3">
                                         <h4 className="font-bold text-sm text-zinc-400 uppercase tracking-wider">
                                             Order Summary
@@ -228,7 +242,7 @@ export default function CartCheckout() {
                                         </div>
                                     </div>
 
-                                    {/* 3. Sleek Checkout Form */}
+                                    {/* Checkout Form */}
                                     <form
                                         onSubmit={handleWhatsAppCheckout}
                                         className="space-y-5"
@@ -244,7 +258,6 @@ export default function CartCheckout() {
                                         </div>
 
                                         <div className="space-y-4">
-                                            {/* Name Input */}
                                             <div className="relative group">
                                                 <input
                                                     type="text"
@@ -260,7 +273,6 @@ export default function CartCheckout() {
                                                 </label>
                                             </div>
 
-                                            {/* WhatsApp Mobile Number */}
                                             <div className="relative group">
                                                 <input
                                                     type="tel"
@@ -276,7 +288,6 @@ export default function CartCheckout() {
                                                 </label>
                                             </div>
 
-                                            {/* Complete Delivery Address */}
                                             <div className="relative group">
                                                 <textarea
                                                     name="address"
@@ -293,7 +304,6 @@ export default function CartCheckout() {
                                             </div>
                                         </div>
 
-                                        {/* WhatsApp Action Button */}
                                         <div className="pt-2">
                                             <button
                                                 type="submit"

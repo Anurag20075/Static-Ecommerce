@@ -10,7 +10,8 @@ export const products = [
     tag: "SALE",
     rating: 4.5,
     reviews: 128,
-    colors: ["#ffffff", "#000000", "#93C5FD"]
+    colors: ["#ffffff", "#000000", "#93C5FD"],
+    colorNames: ["White", "Black", "Light Blue"]
   },
   {
     id: "m2",
@@ -19,7 +20,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=800&auto=format&fit=crop",
     rating: 5.0,
     reviews: 340,
-    colors: ["#1E3A8A", "#0F172A"]
+    colors: ["#1E3A8A", "#0F172A"],
+    colorNames: ["Navy Blue", "Dark Navy"]
   },
   {
     id: "m3",
@@ -28,7 +30,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop",
     rating: 4.0,
     reviews: 89,
-    colors: ["#000000", "#FFFFFF", "#9CA3AF"]
+    colors: ["#000000", "#FFFFFF", "#9CA3AF"],
+    colorNames: ["Black", "White", "Grey"]
   },
   {
     id: "m4",
@@ -38,7 +41,8 @@ export const products = [
     tag: "NEW",
     rating: 4.8,
     reviews: 45,
-    colors: ["#1F2937", "#374151"]
+    colors: ["#1F2937", "#374151"],
+    colorNames: ["Charcoal", "Dark Grey"]
   },
   {
     id: "m5",
@@ -47,7 +51,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1591195854234-9c5b4eaaab7c?q=80&w=800&auto=format&fit=crop",
     rating: 4.2,
     reviews: 67,
-    colors: ["#92400E", "#78716C"]
+    colors: ["#92400E", "#78716C"],
+    colorNames: ["Brown", "Stone"]
   },
   {
     id: "m6",
@@ -56,7 +61,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=800&auto=format&fit=crop",
     rating: 4.6,
     reviews: 112,
-    colors: ["#F3F4F6", "#E5E7EB"]
+    colors: ["#F3F4F6", "#E5E7EB"],
+    colorNames: ["Off White", "Light Grey"]
   },
   {
     id: "m7",
@@ -67,7 +73,8 @@ export const products = [
     tag: "SALE",
     rating: 5.0,
     reviews: 210,
-    colors: ["#451A03", "#000000"]
+    colors: ["#451A03", "#000000"],
+    colorNames: ["Dark Brown", "Black"]
   },
   {
     id: "m8",
@@ -76,7 +83,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800&auto=format&fit=crop",
     rating: 4.7,
     reviews: 95,
-    colors: ["#7C2D12", "#1E3A8A", "#374151"]
+    colors: ["#7C2D12", "#1E3A8A", "#374151"],
+    colorNames: ["Rust", "Navy Blue", "Dark Grey"]
   },
   {
     id: "m9",
@@ -85,7 +93,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=800&auto=format&fit=crop",
     rating: 4.3,
     reviews: 150,
-    colors: ["#000000", "#4B5563"]
+    colors: ["#000000", "#4B5563"],
+    colorNames: ["Black", "Charcoal"]
   },
   {
     id: "m10",
@@ -94,7 +103,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop",
     rating: 4.9,
     reviews: 320,
-    colors: ["#000000", "#0F766E"]
+    colors: ["#000000", "#0F766E"],
+    colorNames: ["Black", "Teal"]
   },
   {
     id: "m11",
@@ -103,7 +113,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=800&auto=format&fit=crop",
     rating: 4.4,
     reviews: 54,
-    colors: ["#374151", "#1F2937"]
+    colors: ["#374151", "#1F2937"],
+    colorNames: ["Dark Grey", "Charcoal"]
   },
   {
     id: "m12",
@@ -112,7 +123,8 @@ export const products = [
     image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=800&auto=format&fit=crop",
     rating: 4.1,
     reviews: 43,
-    colors: ["#57534E", "#292524"]
+    colors: ["#57534E", "#292524"],
+    colorNames: ["Warm Grey", "Espresso"]
   }
 ];
 
