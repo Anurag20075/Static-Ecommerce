@@ -186,29 +186,6 @@ const Navbar = () => {
                         ))}
                     </div>
 
-                    {/* Decorative Divider
-                    <div className="my-6 flex items-center gap-3 px-4">
-                        <div className="flex-1 h-px bg-gray-200" />
-                        <span className="text-[10px] tracking-[0.3em] text-gray-400 uppercase">Quick Access</span>
-                        <div className="flex-1 h-px bg-gray-200" />
-                    </div> */}
-
-                    {/* Cart Shortcut
-                    <button
-                        onClick={() => {
-                            closeMenu();
-                            setTimeout(() => setIsCartOpen(true), 200);
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-3.5 rounded-lg text-[15px] font-medium tracking-wide text-gray-800 hover:text-[#c4a882] hover:bg-[#c4a882]/5 active:bg-[#c4a882]/10 transition-all"
-                    >
-                        <ShoppingBag size={18} />
-                        <span>Shopping Bag</span>
-                        {cartCount > 0 && (
-                            <span className="ml-auto bg-[#1a1a1a] text-white text-[11px] font-semibold min-w-[22px] h-[22px] rounded-full flex items-center justify-center px-1.5">
-                                {cartCount}
-                            </span>
-                        )}
-                    </button> */}
                 </div>
 
                 {/* Menu Footer */}
